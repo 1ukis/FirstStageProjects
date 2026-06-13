@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBR Curriculum: 1-Year Reading Plan</title>
+  <meta name="description" content="A minimalist, aesthetic, and structured reading curriculum for a 14-year-old to read 27 books over 12 months starting June 12, 2026.">
+  
+  <!-- Typography and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="app-container">
+    <!-- Header Dashboard -->
+    <header class="dashboard-header">
+      <div class="header-main">
+        <div class="header-title-section">
+          <span class="badge">12-Month Curriculum</span>
+          <h1 id="main-heading">TBR Reading Plan</h1>
+          <p class="subtitle">A progressive reading timeline from foundational habits to classical philosophy. Designed for age 14.</p>
+        </div>
+        
+        <div class="date-badge">
+          <div class="date-label">Current Timeline Date</div>
+          <div class="date-value" id="current-date-display">June 12, 2026</div>
+        </div>
+      </div>
+      
+      <!-- Metrics Dashboard -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-info">
+            <span class="metric-title">Curriculum Progress</span>
+            <span class="metric-value" id="progress-percent">0%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+          </div>
+          <div class="metric-footer">
+            <span id="books-completed">0 / 40 Books</span>
+            <span id="pages-completed">0 / 11,970 Pages</span>
+          </div>
+        </div>
+        
+        <div class="metric-card highlight">
+          <div class="metric-info">
+            <span class="metric-title">Target Daily Pace</span>
+            <span class="metric-value" id="daily-pace">32.8</span>
+          </div>
+          <span class="metric-unit">pages / day</span>
+          <div class="metric-footer">
+            <span id="days-remaining">365 Days Left</span>
+            <span>Based on remaining pages</span>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-info">
+            <span class="metric-title">Active Target</span>
+            <span class="metric-value" id="current-focus-badge">Month 1</span>
+          </div>
+          <span class="metric-unit" id="current-focus-label">Habit & Narrative</span>
+          <div class="metric-footer">
+            <span id="current-month-span">June 12 – July 12</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Interactive Navigation and Filters -->
+    <section class="controls-section">
+      <div class="view-switch-container">
+        <button class="view-btn active" id="btn-timeline-view" aria-label="Switch to Timeline View">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          Timeline Order
+        </button>
+        <button class="view-btn" id="btn-theme-view" aria-label="Switch to Theme View">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Themes & Topics
+        </button>
+      </div>
+
+      <!-- Quick Jumps / Filter Chips -->
+      <div class="filters-container" id="filters-container">
+        <!-- Dynmically filled by JavaScript based on active view -->
+      </div>
+    </section>
+
+    <!-- Main Content Layout -->
+    <main class="main-content-grid">
+      
+      <!-- Left Panel: Reading List Grid -->
+      <section class="reading-list-section">
+        <div id="curriculum-container">
+          <!-- Dynamic Content Rendered Here -->
+        </div>
+      </section>
+
+      <!-- Right Panel: Stoic Practice Companion (Starts Jan 1st) -->
+      <aside class="side-companion-section">
+        <div class="companion-card" id="stoic-companion-card">
+          <div class="companion-header">
+            <div class="companion-icon-wrapper">
+              <svg viewBox="0 0 24 24" class="companion-icon" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Daily Stoic Companion</h3>
+              <p class="companion-tagline">Launches January 1st, 2027</p>
+            </div>
+          </div>
+          
+          <div class="companion-body">
+            <p class="companion-desc">
+              Designed as a lifelong habit. Read one page from <strong>The Daily Stoic</strong>, reflect in the <strong>Journal</strong>, and read a passage of <strong>Meditations</strong> daily.
+            </p>
+            
+            <div class="companion-status" id="stoic-status-box">
+              <span class="badge badge-locked" id="stoic-date-status">Locked (Starts in 203 Days)</span>
+            </div>
+            
+            <div class="stoic-books-inline">
+              <div class="stoic-book-row">
+                <input type="checkbox" id="stoic-main-check" class="custom-checkbox">
+                <label for="stoic-main-check">
+                  <strong>The Daily Stoic</strong>
+                  <span>Ryan Holiday & Stephen Hanselman</span>
+                </label>
+              </div>
+              <div class="stoic-book-row">
+                <input type="checkbox" id="stoic-journal-check" class="custom-checkbox">
+                <label for="stoic-journal-check">
+                  <strong>The Daily Stoic Journal</strong>
+                  <span>Ryan Holiday & Stephen Hanselman</span>
+                </label>
+              </div>
+              <div class="stoic-book-row">
+                <input type="checkbox" id="stoic-meditations-check" class="custom-checkbox">
+                <label for="stoic-meditations-check">
+                  <strong>Meditations (Daily Read)</strong>
+                  <span>Marcus Aurelius</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="companion-footer">
+            <span class="footnote">Recommended reading time: 3 mins daily.</span>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+    
+    <!-- Toast Notification for persistent save -->
+    <div id="autosave-toast" class="toast">Progress saved locally</div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
