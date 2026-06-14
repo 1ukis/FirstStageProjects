@@ -14,9 +14,28 @@
 </head>
 <body>
   
+  <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 10000;"></canvas>
+
   <div class="app-container">
-    <!-- Header Dashboard -->
-    <header class="dashboard-header">
+    <!-- Top Navigation Menu -->
+    <nav class="app-nav">
+      <div class="nav-brand">TBR Reading Plan</div>
+      <div class="nav-links">
+        <button class="nav-link active" id="nav-dashboard" aria-label="View Curriculum Dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6 2H20V22H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6 2z"/></svg>
+          Curriculum Dashboard
+        </button>
+        <button class="nav-link" id="nav-progress" aria-label="View Reading Progress Tracker">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+          Reading Progress
+        </button>
+      </div>
+    </nav>
+
+    <!-- Wrap Curriculum in Dashboard View Container -->
+    <div id="dashboard-view">
+      <!-- Header Dashboard -->
+      <header class="dashboard-header">
       <div class="header-main">
         <div class="header-title-section">
           <span class="badge">12-Month Curriculum</span>
@@ -46,17 +65,7 @@
           </div>
         </div>
         
-        <div class="metric-card highlight">
-          <div class="metric-info">
-            <span class="metric-title">Target Daily Pace</span>
-            <span class="metric-value" id="daily-pace">32.8</span>
-          </div>
-          <span class="metric-unit">pages / day</span>
-          <div class="metric-footer">
-            <span id="days-remaining">365 Days Left</span>
-            <span>Based on remaining pages</span>
-          </div>
-        </div>
+
         
         <div class="metric-card">
           <div class="metric-info">
@@ -100,8 +109,9 @@
         </div>
       </section>
 
-      <!-- Right Panel: Stoic Practice Companion (Starts Jan 1st) -->
+      <!-- Right Panel: Stoic Practice Companion -->
       <aside class="side-companion-section">
+
         <div class="companion-card" id="stoic-companion-card">
           <div class="companion-header">
             <div class="companion-icon-wrapper">
@@ -156,6 +166,191 @@
       </aside>
 
     </main>
+    </div> <!-- End of #dashboard-view -->
+
+    <!-- Reading Progress Dedicated View -->
+    <section id="progress-view" class="hidden">
+      <div class="progress-page-grid">
+        
+        <!-- Left Column: Logging Form -->
+        <div class="progress-card logging-panel">
+          <div class="panel-header">
+            <h2>Log Today's Reading</h2>
+            <p class="panel-subtitle">Record your daily page counts and build your reading identity.</p>
+          </div>
+          
+          <div class="form-group">
+            <label for="progress-book-select">Select Book</label>
+            <select id="progress-book-select" class="form-select">
+              <!-- Filled by JS -->
+            </select>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="progress-difficulty-select">Book Difficulty Override</label>
+              <select id="progress-difficulty-select" class="form-select">
+                <option value="easy">Easy (Target: 30 pages)</option>
+                <option value="medium">Medium (Target: 20 pages)</option>
+                <option value="hard">Hard (Target: 15 pages)</option>
+              </select>
+            </div>
+            
+            <div class="form-group flex-1">
+              <label for="progress-base-goal">Base Daily Goal (Pages)</label>
+              <input type="number" id="progress-base-goal" class="form-input" value="30" min="5" max="200">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="progress-pages-input">Pages Read Today</label>
+              <input type="number" id="progress-pages-input" class="form-input" placeholder="e.g. 25" min="0" max="500">
+            </div>
+            
+            <div class="goal-display-box">
+              <span class="goal-box-label">Today's Target</span>
+              <span class="goal-box-value" id="today-goal-pages">30</span>
+              <span class="goal-box-unit">pages</span>
+            </div>
+          </div>
+          
+          <button id="btn-log-reading" class="log-action-btn">
+            Log Daily Reading & Sync
+          </button>
+          
+          <!-- Positive Reinforcement Feedback Box -->
+          <div id="reinforcement-feedback-box" class="feedback-box hidden">
+            <div class="feedback-icon" id="feedback-emoji">🌱</div>
+            <p id="feedback-message-text" class="feedback-text"></p>
+          </div>
+          
+          <!-- Streak Counters and Badges -->
+          <div class="identity-stats-row">
+            <div class="stat-badge">
+              <span class="badge-title">Current Streak</span>
+              <span class="badge-val text-accent-rose" id="progress-current-streak">0</span>
+              <span class="badge-lbl">days</span>
+            </div>
+            <div class="stat-badge">
+              <span class="badge-title">Longest Streak</span>
+              <span class="badge-val text-accent" id="progress-longest-streak">0</span>
+              <span class="badge-lbl">days</span>
+            </div>
+            <div class="stat-badge flex-2">
+              <span class="badge-title">Reading Identity</span>
+              <span class="badge-val text-accent-gold" id="progress-identity-level">Level 1: Novice Page-Turner</span>
+              <span class="badge-lbl">Milestone Status</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column: Contribution Grid -->
+        <div class="progress-card visualization-panel">
+          <div class="panel-header">
+            <h2>Reading Contribution Graph</h2>
+            <p class="panel-subtitle">Visualizing your reading volume and consistency over the year-long plan.</p>
+          </div>
+          
+          <div class="cal-legend-container">
+            <span class="cal-legend-title">Reading Volume:</span>
+            <div class="legend-scale">
+              <span>Less</span>
+              <div class="legend-cell density-0" title="0 pages"></div>
+              <div class="legend-cell density-1" title="1-14 pages"></div>
+              <div class="legend-cell density-2" title="15-29 pages"></div>
+              <div class="legend-cell density-3" title="30+ pages"></div>
+              <span>More</span>
+            </div>
+          </div>
+
+          <!-- The Scrollable Contribution Graph Wrapper -->
+          <div class="calendar-scroll-wrapper">
+            <div class="calendar-grid-header">
+              <div id="calendar-months-row" class="months-row"></div>
+            </div>
+            <div class="calendar-grid-body">
+              <div class="days-of-week-labels">
+                <span>Mon</span>
+                <span>Wed</span>
+                <span>Fri</span>
+              </div>
+              <div id="contribution-calendar-grid" class="contribution-grid">
+                <!-- Cells dynamically rendered -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- Cumulative Stats Section -->
+          <div class="cumulative-chart-section">
+            <div class="chart-header">
+              <h3>Reading Volume & Consistency</h3>
+              <span id="total-logged-pages-count" class="metric-count">Total: 0 pages</span>
+            </div>
+            <div class="consistency-bar-card">
+              <div class="bar-info">
+                <span>Consistency Rate (Days with reading logged vs elapsed time)</span>
+                <span id="consistency-rate-pct">0%</span>
+              </div>
+              <div class="bar-track">
+                <div id="consistency-bar-fill" class="bar-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TBR (To Be Read) List Management Section -->
+      <div class="progress-card tbr-panel" style="margin-top: 32px;">
+        <div class="panel-header">
+          <h2>To Be Read (TBR) List Management</h2>
+          <p class="panel-subtitle">Curate your future reading list. Add books, edit their difficulty, or set them as active to track them.</p>
+        </div>
+        
+        <!-- Add Book Form -->
+        <div class="tbr-form-row" style="flex-wrap: wrap; gap: 16px;">
+          <div class="form-group" style="flex: 2; min-width: 200px;">
+            <label for="tbr-title-input">Book Title</label>
+            <input type="text" id="tbr-title-input" class="form-input" placeholder="e.g. Thinking, Fast and Slow">
+          </div>
+          <div class="form-group" style="flex: 2; min-width: 200px;">
+            <label for="tbr-author-input">Author</label>
+            <input type="text" id="tbr-author-input" class="form-input" placeholder="e.g. Daniel Kahneman">
+          </div>
+          <div class="form-group" style="flex: 1; min-width: 100px;">
+            <label for="tbr-pages-input">Pages</label>
+            <input type="number" id="tbr-pages-input" class="form-input" placeholder="e.g. 499">
+          </div>
+          <div class="form-group" style="flex: 1; min-width: 140px;">
+            <label for="tbr-difficulty-select">Difficulty</label>
+            <select id="tbr-difficulty-select" class="form-select">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 2; min-width: 200px;">
+            <label for="tbr-category-select">Category</label>
+            <select id="tbr-category-select" class="form-select" onchange="const customInput = document.getElementById('tbr-custom-category-input'); if(this.value === 'new') { customInput.style.display = 'block'; customInput.focus(); } else { customInput.style.display = 'none'; }">
+              <!-- Populated by JS -->
+            </select>
+            <input type="text" id="tbr-custom-category-input" class="form-input" placeholder="Custom Category Name" style="display: none; margin-top: 8px;">
+          </div>
+          <div class="form-group align-end" style="flex: 1; min-width: 120px;">
+            <button id="btn-tbr-add" class="log-action-btn" style="margin-top: 0; height: 46px; width: 100%;">
+              Add Book
+            </button>
+          </div>
+        </div>
+        
+        <!-- TBR List Display -->
+        <div class="tbr-list-container">
+          <ul id="tbr-list" class="tbr-list">
+            <!-- Rendered dynamically by JS -->
+          </ul>
+        </div>
+      </div>
+    </section>
     
     <!-- Toast Notification for persistent save -->
     <div id="autosave-toast" class="toast">Progress saved locally</div>
